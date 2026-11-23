@@ -1,0 +1,35 @@
+[build-system]
+requires = ["setuptools>=70"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "employee-manager"
+version = "0.1.0"
+description = "Employee accounting laboratory project (variant 6)"
+readme = "README.md"
+requires-python = ">=3.11"
+authors = [{ name = "Anastasiia Zhmurko" }]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+    "mypy>=1.10",
+]
+
+[project.scripts]
+employee-manager = "employee_manager.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 88
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = ["-ra"]
+
+[tool.mypy]
+strict = true
+mypy_path = "src"
