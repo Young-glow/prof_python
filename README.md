@@ -1,7 +1,12 @@
 # Employee Manager
 
-Laboratory work No. 1 for the course "Professional Python".
+Laboratory works for the course "Professional Python".
 Variant 6 — "Employee accounting".
+
+| Lab | Topic | Package |
+| --- | --- | --- |
+| 1 | Professional Python project and Git | `employee_manager` |
+| 2 | Data structures and functional decomposition | `data_processor` |
 
 ## Description
 
@@ -71,10 +76,40 @@ Highest paid: Iryna Bondar, Team Lead (68000.00 UAH)
 Total payroll fund: 259000.00 UAH
 ```
 
+## Laboratory work 2: data processor
+
+Module for processing structured employee data: unique departments,
+grouping, average salary (total and by department), highest paid employee,
+payroll fund, filtering by salary, `Counter` by department, search,
+sorting, nested grouping, pipeline processing and summary export.
+
+It uses `list`, `tuple`, `set`, `dict`, `Counter`, `defaultdict`, `deque`,
+list/set/dict comprehensions, generator expressions, `*args`, `**kwargs`,
+`lambda`, closures and decorators (including a parametrized one).
+
+```bash
+python -m data_processor.main                       # full demo
+python -m data_processor.main --section search      # one part only
+python -m data_processor.main --benchmark           # list vs dict search
+```
+
+Sections: `structures`, `aggregation`, `search`, `functions`.
+
+### Complexity of the main operations
+
+| Operation | Structure | Complexity |
+| --- | --- | --- |
+| search by id | list (`find_linear`) | O(n) |
+| building an index | dict comprehension | O(n) |
+| search by id | dict (`index.get`) | O(1) average |
+| membership test | set | O(1) average |
+| grouping | defaultdict | O(n) |
+| sorting | `sorted` | O(n log n) |
+
 ## Tests and checks
 
 ```bash
-python -m pytest          # 6 tests
+python -m pytest          # 18 tests
 python -m mypy src tests  # strict type checking
 python -m ruff check src tests
 ```
@@ -87,6 +122,13 @@ python -m ruff check src tests
 - `src/employee_manager/exceptions.py` — custom exceptions.
 - `src/employee_manager/main.py` — application entry point, console menu.
 - `tests/test_services.py` — tests.
+- `src/data_processor/data.py` — input data (lab 2).
+- `src/data_processor/decorators.py` — decorators `measure_time`, `log_operation`.
+- `src/data_processor/processors.py` — search, filtering, grouping, closures.
+- `src/data_processor/analytics.py` — aggregation, sorting, summary, pipeline.
+- `src/data_processor/benchmark.py` — list vs dict search benchmark.
+- `src/data_processor/main.py` — lab 2 entry point.
+- `tests/test_data_processor.py` — lab 2 tests.
 - `reports/` — laboratory work reports.
 
 ## Author
