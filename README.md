@@ -9,6 +9,7 @@ Variant 6 — "Employee accounting".
 | 2 | Data structures and functional decomposition | `data_processor` |
 | 3 | Iterators, generators and streaming processing | `stream_processor` |
 | 4 | Professional OOP and the Python type system | `employee_domain` |
+| 5 | Error handling, files and serialization | `employee_importer` |
 
 ## Description
 
@@ -178,10 +179,46 @@ python -m mypy examples/type_errors.py            # type-checking experiment (4 
 python -m mypy examples/type_errors_fixed.py      # after the corrections
 ```
 
+## Laboratory work 5: reliable import/export
+
+`employee_importer` reads employee records (`employee_id, name, position,
+department, salary`), validates them, filters by the minimum salary from
+`config.yaml` and exports the result atomically.
+
+```
+config.yaml -> load_config() -> validate_config() -> CSV/JSON/JSONL/YAML importer
+  -> parse_employee() -> strict / tolerant policy -> filter_by_min_salary()
+  -> exporter (json / jsonl / csv) -> *.tmp -> os.replace -> output/employees.json
+  -> output/errors.csv, output/summary.json, logs/importer.log
+```
+
+| Feature | Where |
+| --- | --- |
+| Exception hierarchy, chaining | `exceptions.py`, `raise ... from error` everywhere |
+| YAML configuration, fail-fast validation, env overrides | `config.py`, `config.yaml` |
+| Logging with rotation and salary masking | `logging_config.py` |
+| Streaming readers behind `Importer` Protocol, format by extension | `readers.py` |
+| Validation, strict / tolerant policy objects | `validators.py` |
+| Statistics, filtering | `services.py`, `models.py` |
+| Exporters behind `Exporter` Protocol, custom JSON encoder, error CSV, summary | `exporters.py` |
+| Own context managers: `AtomicWriter`, `logged_operation` | `files.py` |
+| Experiments 1-5 | `experiments.py` |
+
+```bash
+python -m pip install pyyaml
+python -m employee_importer.main                          # tolerant mode from config.yaml
+set EMPLOYEE_IMPORTER_SKIP_INVALID=false                  # Windows: strict mode without editing files
+python -m employee_importer.main                          # stops on the first invalid row, exit code 1
+python -m employee_importer.main --experiment all         # strict, memory, chaining, atomic, config
+```
+
+Environment overrides: `EMPLOYEE_IMPORTER_MIN_SALARY`, `EMPLOYEE_IMPORTER_SKIP_INVALID`,
+`EMPLOYEE_IMPORTER_LOG_LEVEL`. Runtime folders `output/` and `logs/` are ignored by git.
+
 ## Tests and checks
 
 ```bash
-python -m pytest          # 42 tests
+python -m pytest          # 59 tests
 python -m mypy src tests  # strict type checking
 python -m ruff check src tests
 ```
@@ -210,6 +247,10 @@ python -m ruff check src tests
   `protocols.py`, `policies.py`, `repositories.py`, `generics.py`, `dto.py`,
   `adapters.py`, `services.py`, `container.py`, `experiments.py`, `seed.py`, `main.py`.
 - `examples/` — lab 4 type-checking experiment.
+- `src/employee_importer/` — lab 5: `exceptions.py`, `models.py`, `config.py`,
+  `logging_config.py`, `readers.py`, `validators.py`, `services.py`, `exporters.py`,
+  `files.py`, `experiments.py`, `main.py`; `config.yaml`, `data/staff.csv`.
+- `tests/test_employee_importer.py` — lab 5 tests.
 - `tests/test_employee_domain.py` — lab 4 tests.
 - `reports/` — laboratory work reports.
 
