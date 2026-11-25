@@ -12,3 +12,6 @@ build/
 .ruff_cache/
 htmlcov/
 .coverage
+
+# large generated datasets (laboratory work 3)
+data/generated/

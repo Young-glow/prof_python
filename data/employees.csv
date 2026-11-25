@@ -1,0 +1,17 @@
+employee_id,name,position,department,salary
+1,anna koval,Python Developer,IT,52000
+2,Oleh Melnyk,Accountant,Finance,31000
+3,iryna bondar,Team Lead,IT,68000
+4,Andrii Shevchenko,HR Manager,HR,29000
+5,Maria Tkachenko,Financial Analyst,Finance,41000
+6,Taras Lysenko,QA Engineer,IT,38000
+7,Olena Kravets,Recruiter,HR,26000
+8,Dmytro Savchenko,DevOps Engineer,IT,61000
+9,Kateryna Moroz,Chief Accountant,Finance,47000
+10,Petro Ivanenko,Sales Manager,Sales,34000
+11,Sofiia Hnatiuk,Sales Representative,Sales,27000
+12,Yurii Pavlenko,Python Developer,IT,49000
+13,Broken Record,Designer,Marketing,error
+14,,Analyst,Finance,30000
+15,Negative Salary,Intern,IT,-500
+16,  viktoriia rudenko  ,Designer,Marketing,36000
