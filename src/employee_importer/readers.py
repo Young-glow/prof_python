@@ -31,8 +31,7 @@ class CsvImporter:
                 reader = csv.DictReader(file)
                 if reader.fieldnames is None:
                     raise DataImportError(f"CSV file is empty: {path.name}")
-                for line_number, row in enumerate(reader, start=2):
-                    yield line_number, row
+                yield from enumerate(reader, start=2)
         except OSError as error:
             raise DataImportError(f"Cannot read input file: {path}") from error
         except csv.Error as error:

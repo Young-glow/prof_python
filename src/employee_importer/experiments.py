@@ -6,8 +6,8 @@ import csv
 import hashlib
 import logging
 import random
-import tempfile
 import sys
+import tempfile
 import traceback
 import tracemalloc
 from collections.abc import Callable, Iterator
@@ -125,10 +125,18 @@ def streaming_import(path: Path) -> Iterator[dict[str, str]]:
         yield from csv.DictReader(file)
 
 
-def _measure(action: Callable[[], int]) -> tuple[float, float, int]:
+def count_eager(path: Path) -> int:
+    return len(eager_import(path))
+
+
+def count_streaming(path: Path) -> int:
+    return sum(1 for _ in streaming_import(path))
+
+
+def _measure(action: Callable[[Path], int], path: Path) -> tuple[float, float, int]:
     tracemalloc.start()
     start = perf_counter()
-    count = action()
+    count = action(path)
     elapsed = perf_counter() - start
     _, peak = tracemalloc.get_traced_memory()
     tracemalloc.stop()
@@ -143,8 +151,8 @@ def experiment_memory(sizes: tuple[int, ...] = (10_000, 100_000, 500_000)) -> No
         path = GENERATED / f"employees_{size}.csv"
         if not path.exists():
             generate_csv(path, size)
-        eager = _measure(lambda: len(eager_import(path)))
-        stream = _measure(lambda: sum(1 for _ in streaming_import(path)))
+        eager = _measure(count_eager, path)
+        stream = _measure(count_streaming, path)
         assert eager[2] == stream[2] == size
         print(f"{size:>9,} {eager[0]:>9.3f} {stream[0]:>9.3f} "
               f"{eager[1]:>14.2f} {stream[1]:>15.3f} {eager[1] / stream[1]:>9.0f}x")
