@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "employee-manager"
-version = "0.5.0"
+version = "0.6.0"
 description = "Professional Python laboratory works, variant 6 (employee accounting)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -16,6 +16,8 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "pytest-asyncio>=0.23",
     "ruff>=0.5",
     "mypy>=1.10",
 ]
@@ -36,7 +38,26 @@ line-length = 88
 [tool.pytest.ini_options]
 testpaths = ["tests"]
 pythonpath = ["src"]
-addopts = ["-ra"]
+addopts = ["-ra", "--strict-markers"]
+markers = [
+    "integration: tests that combine several real components (files, config, pipeline)",
+    "slow: tests that take noticeably longer",
+]
+asyncio_default_fixture_loop_scope = "function"
+
+[tool.coverage.run]
+branch = true
+source = ["employee_domain", "employee_importer"]
+omit = ["*/experiments.py"]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+fail_under = 80
+exclude_also = ["if __name__ == .__main__.:"]
+
+[tool.coverage.html]
+directory = "htmlcov"
 
 [tool.mypy]
 python_version = "3.11"
