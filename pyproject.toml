@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "employee-manager"
-version = "0.2.0"
+version = "0.3.0"
 description = "Professional Python laboratory works, variant 6 (employee accounting)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -20,6 +20,7 @@ dev = [
 [project.scripts]
 employee-manager = "employee_manager.main:main"
 data-processor = "data_processor.main:main"
+stream-processor = "stream_processor.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

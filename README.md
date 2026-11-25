@@ -7,6 +7,7 @@ Variant 6 — "Employee accounting".
 | --- | --- | --- |
 | 1 | Professional Python project and Git | `employee_manager` |
 | 2 | Data structures and functional decomposition | `data_processor` |
+| 3 | Iterators, generators and streaming processing | `stream_processor` |
 
 ## Description
 
@@ -106,10 +107,41 @@ Sections: `structures`, `aggregation`, `search`, `functions`.
 | grouping | defaultdict | O(n) |
 | sorting | `sorted` | O(n log n) |
 
+## Laboratory work 3: stream processor
+
+Lazy streaming pipeline for a CSV file of employees
+(`employee_id,name,position,department,salary`):
+
+```
+CSV file -> read_lines() -> clean_lines() -> parse_csv_rows()
+         -> validate_employees() -> normalize_names()
+         -> filter_by_department() -> filter_by_salary()
+         -> calculate_statistics() / batched() -> export_batches()
+```
+
+Every stage is a generator, so records are processed one by one and the
+whole file is never loaded into memory. Implemented: streaming validation
+(with counting of invalid records), filtering by department and salary,
+streaming average salary, highest paid employee, payroll fund, `Counter`
+by department, batch export, custom iterator class, recursive generator
+with `yield from`, `itertools` (`islice`, `chain`, `count`, `accumulate`,
+`pairwise`, `groupby`, `takewhile`), eager vs lazy experiment and early
+termination.
+
+```bash
+python -m stream_processor.main                      # full demo on data/employees.csv
+python -m stream_processor.main --section itertools  # pipeline, itertools, iterators, batches
+python -m stream_processor.main --experiment         # eager vs lazy (10k, 100k, 500k records)
+python -m stream_processor.main --early              # early termination on 1 000 000 records
+```
+
+Large test files are generated automatically into `data/generated/`
+(ignored by Git).
+
 ## Tests and checks
 
 ```bash
-python -m pytest          # 18 tests
+python -m pytest          # 28 tests
 python -m mypy src tests  # strict type checking
 python -m ruff check src tests
 ```
@@ -129,6 +161,11 @@ python -m ruff check src tests
 - `src/data_processor/benchmark.py` — list vs dict search benchmark.
 - `src/data_processor/main.py` — lab 2 entry point.
 - `tests/test_data_processor.py` — lab 2 tests.
+- `data/employees.csv` — sample input for lab 3 (with invalid records).
+- `src/stream_processor/` — lab 3: `readers.py`, `parsers.py`, `filters.py`,
+  `transformations.py`, `batches.py`, `analytics.py`, `export.py`,
+  `iterators.py`, `pipeline.py`, `generate.py`, `experiment.py`, `main.py`.
+- `tests/test_stream_processor.py` — lab 3 tests.
 - `reports/` — laboratory work reports.
 
 ## Author
