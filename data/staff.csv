@@ -1,0 +1,15 @@
+employee_id,name,position,department,salary
+1,Anna Koval,Python Developer,IT,52000
+2,Oleh Melnyk,Accountant,Finance,31000
+3,Iryna Bondar,Team Lead,IT,68000
+4,,Recruiter,HR,29000
+5,Maria Tkachenko,Data Analyst,Finance,41000
+abc,Petro Novak,Sales Manager,Sales,35000
+7,Sofiia Hnatiuk,HR Specialist,HR,27500
+8,Dmytro Savchenko,DevOps Engineer,IT,61000
+9,Kateryna Moroz,Financial Analyst,Finance,-47000
+10,Bohdan Kravets,Marketing Manager,Marketing,39000
+11,Nazar Levchenko,Sales Representative,Sales,33000
+12,Yurii Pavlenko,Backend Developer,IT,n/a
+13,Olena Romaniuk,,HR,34000
+14,Viktor Holub,QA Engineer,IT,45500

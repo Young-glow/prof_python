@@ -1,0 +1,28 @@
+# Laboratory work 5 - configuration of the employee importer (variant 6)
+version: 1
+
+input:
+  path: data/staff.csv
+  # format: csv        # optional, detected from the extension (csv/json/jsonl/yaml)
+
+output:
+  path: output/employees.json
+  format: json         # json | jsonl | csv
+  errors_path: output/errors.csv
+  summary_path: output/summary.json
+  backup: true         # keep the previous result as *.bak
+
+processing:
+  minimum_salary: 30000
+  skip_invalid: true   # true = tolerant mode, false = strict mode
+  allowed_departments:
+    - IT
+    - Finance
+    - HR
+    - Sales
+
+logging:
+  level: INFO
+  path: logs/importer.log
+  max_bytes: 1000000
+  backup_count: 3

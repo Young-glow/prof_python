@@ -4,11 +4,14 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "employee-manager"
-version = "0.4.0"
+version = "0.5.0"
 description = "Professional Python laboratory works, variant 6 (employee accounting)"
 readme = "README.md"
 requires-python = ">=3.11"
 authors = [{ name = "Anastasiia Zhmurko" }]
+dependencies = [
+    "PyYAML>=6.0",
+]
 
 [project.optional-dependencies]
 dev = [
@@ -22,6 +25,7 @@ employee-manager = "employee_manager.main:main"
 data-processor = "data_processor.main:main"
 stream-processor = "stream_processor.main:main"
 employee-domain = "employee_domain.main:main"
+employee-importer = "employee_importer.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -40,3 +44,7 @@ strict = true
 warn_unused_ignores = true
 warn_return_any = true
 mypy_path = "src"
+
+[[tool.mypy.overrides]]
+module = ["yaml", "yaml.*"]
+ignore_missing_imports = true

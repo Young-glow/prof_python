@@ -15,3 +15,7 @@ htmlcov/
 
 # large generated datasets (laboratory work 3)
 data/generated/
+
+# laboratory work 5 runtime output
+output/
+logs/
