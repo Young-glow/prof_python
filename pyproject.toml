@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "employee-manager"
-version = "0.3.0"
+version = "0.4.0"
 description = "Professional Python laboratory works, variant 6 (employee accounting)"
 readme = "README.md"
 requires-python = ">=3.11"
@@ -21,6 +21,7 @@ dev = [
 employee-manager = "employee_manager.main:main"
 data-processor = "data_processor.main:main"
 stream-processor = "stream_processor.main:main"
+employee-domain = "employee_domain.main:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
@@ -34,5 +35,8 @@ pythonpath = ["src"]
 addopts = ["-ra"]
 
 [tool.mypy]
+python_version = "3.11"
 strict = true
+warn_unused_ignores = true
+warn_return_any = true
 mypy_path = "src"

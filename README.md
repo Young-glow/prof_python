@@ -8,6 +8,7 @@ Variant 6 — "Employee accounting".
 | 1 | Professional Python project and Git | `employee_manager` |
 | 2 | Data structures and functional decomposition | `data_processor` |
 | 3 | Iterators, generators and streaming processing | `stream_processor` |
+| 4 | Professional OOP and the Python type system | `employee_domain` |
 
 ## Description
 
@@ -138,10 +139,49 @@ python -m stream_processor.main --early              # early termination on 1 00
 Large test files are generated automatically into `data/generated/`
 (ignored by Git).
 
+## Laboratory work 4: typed OOP model
+
+Object model of employee accounting with a service layer.
+
+| Element | Where |
+| --- | --- |
+| Domain classes | `Employee` (ABC), `Manager`, `Developer`, `Department`, `PayrollRecord` |
+| Value objects (frozen dataclass) | `Money`, `Email` |
+| Inheritance | `Manager(Employee)`, `Developer(Employee)`, bonus policies |
+| Composition | `Department` has employees, services have repositories and notifier |
+| Properties | `Employee.id`, `name`, `salary`, `department`; `Department.payroll` |
+| Dunder methods | `__repr__`, `__str__`, `__eq__`, `__hash__`, `__lt__`, `__add__`, `__mul__`, `__len__`, `__iter__`, `__contains__`, `__getitem__`, `__bool__` |
+| ABC | `Employee`, `BonusPolicy` |
+| Protocol | `HasId`, `Repository[T]`, `Notifier`, `ReportExporter` (runtime_checkable) |
+| Generics | `InMemoryRepository[T]` (bound TypeVar), `MetricService[T]`, `Result[T]`, constrained `Number` |
+| TypedDict | `EmployeePayload` (with `NotRequired`), `DepartmentReport` |
+| Services | `EmployeeService`, `PayrollService`, `ReportService` |
+| DI | manual container `Container` in `container.py` |
+
+```
+             Employee (ABC)                      BonusPolicy (ABC)
+               ▲        ▲                    ▲        ▲          ▲
+           Manager   Developer           NoBonus  RoleBonus  PercentageBonus ...
+               │        │
+               └──► Department ◄── has many Employee      Money, Email (frozen)
+                                                                   ▲
+EmployeeService ── Repository[Employee], Repository[Department], Notifier
+PayrollService  ── BonusPolicy, Notifier ──► PayrollRecord
+ReportService   ── Repository[Department] ──► DepartmentReport ──► ReportExporter
+```
+
+```bash
+python -m employee_domain.main                    # full demo
+python -m employee_domain.main --section payroll  # model, services, payroll, reports, design
+python -m mypy src                                # Success: no issues found
+python -m mypy examples/type_errors.py            # type-checking experiment (4 errors)
+python -m mypy examples/type_errors_fixed.py      # after the corrections
+```
+
 ## Tests and checks
 
 ```bash
-python -m pytest          # 28 tests
+python -m pytest          # 42 tests
 python -m mypy src tests  # strict type checking
 python -m ruff check src tests
 ```
@@ -166,6 +206,11 @@ python -m ruff check src tests
   `transformations.py`, `batches.py`, `analytics.py`, `export.py`,
   `iterators.py`, `pipeline.py`, `generate.py`, `experiment.py`, `main.py`.
 - `tests/test_stream_processor.py` — lab 3 tests.
+- `src/employee_domain/` — lab 4: `value_objects.py`, `exceptions.py`, `models.py`,
+  `protocols.py`, `policies.py`, `repositories.py`, `generics.py`, `dto.py`,
+  `adapters.py`, `services.py`, `container.py`, `experiments.py`, `seed.py`, `main.py`.
+- `examples/` — lab 4 type-checking experiment.
+- `tests/test_employee_domain.py` — lab 4 tests.
 - `reports/` — laboratory work reports.
 
 ## Author
