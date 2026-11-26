@@ -83,3 +83,13 @@ def test_policies() -> None:
     assert TolerantPolicy().handle(error) is None
     with pytest.raises(RecordValidationError):
         StrictPolicy().handle(error)
+
+
+@pytest.mark.parametrize("column", ["name", "position", "department"])
+def test_missing_text_column_is_reported(column: str) -> None:
+    """Added after coverage showed that the KeyError branch was never executed."""
+    row = {k: v for k, v in VALID.items() if k != column}
+    message = f"Missing column '{column}'"
+    with pytest.raises(RecordValidationError, match=message) as info:
+        parse_employee(row, line_number=4, allowed_departments=ALLOWED)
+    assert isinstance(info.value.__cause__, KeyError)

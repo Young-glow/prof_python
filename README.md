@@ -10,6 +10,7 @@ Variant 6 — "Employee accounting".
 | 3 | Iterators, generators and streaming processing | `stream_processor` |
 | 4 | Professional OOP and the Python type system | `employee_domain` |
 | 5 | Error handling, files and serialization | `employee_importer` |
+| 6 | Automated testing with pytest | `tests/unit`, `tests/integration` |
 
 ## Description
 
@@ -215,10 +216,39 @@ python -m employee_importer.main --experiment all         # strict, memory, chai
 Environment overrides: `EMPLOYEE_IMPORTER_MIN_SALARY`, `EMPLOYEE_IMPORTER_SKIP_INVALID`,
 `EMPLOYEE_IMPORTER_LOG_LEVEL`. Runtime folders `output/` and `logs/` are ignored by git.
 
+## Laboratory work 6: automated testing
+
+The test suite covers the employee accounting system of labs 4 and 5
+(`employee_domain`, `employee_importer`) plus the new async payroll service
+`employee_domain/async_payroll.py`.
+
+```
+tests/
+├── conftest.py                 # shared fixtures: factory, parameterized, autouse, yield
+├── unit/                       # models, money, services, payroll, async payroll,
+│                               # validation, configuration, files/logging, exporters
+├── integration/                # CSV -> config -> JSON pipeline, payroll -> report,
+│                               # demo application flow   (marker: integration)
+└── test_*.py                   # tests of labs 1-5
+experiments/lab6/               # experiments 1-6 (weak tests, flaky tests, ...)
+```
+
+```bash
+python -m pip install -e ".[dev]"                     # pytest, pytest-cov, pytest-asyncio
+python -m pytest -v                                    # whole suite
+python -m pytest -m "not integration"                  # unit tests only
+python -m pytest -m integration                        # integration tests only
+python -m pytest tests/unit/test_models.py::test_empty_department   # one test
+python -m pytest --cov --cov-branch --cov-report=term-missing --cov-report=html
+```
+
+Coverage settings (`branch = true`, `fail_under = 80`) are in `pyproject.toml`;
+the HTML report is written to `htmlcov/index.html`.
+
 ## Tests and checks
 
 ```bash
-python -m pytest          # 59 tests
+python -m pytest          # 199 tests
 python -m mypy src tests  # strict type checking
 python -m ruff check src tests
 ```
@@ -251,6 +281,7 @@ python -m ruff check src tests
   `logging_config.py`, `readers.py`, `validators.py`, `services.py`, `exporters.py`,
   `files.py`, `experiments.py`, `main.py`; `config.yaml`, `data/staff.csv`.
 - `tests/test_employee_importer.py` — lab 5 tests.
+- `tests/conftest.py`, `tests/unit/`, `tests/integration/`, `experiments/lab6/` — lab 6.
 - `tests/test_employee_domain.py` — lab 4 tests.
 - `reports/` — laboratory work reports.
 
