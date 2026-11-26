@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import logging
+import math
 import re
 from collections.abc import Collection, Mapping
 from typing import Any, Protocol
@@ -72,6 +73,10 @@ def parse_employee(
         raise RecordValidationError(
             "Salary must be a number", line_number=line_number, field="salary"
         ) from error
+    if not math.isfinite(salary):  # float() accepts "nan" and "inf"
+        raise RecordValidationError(
+            "Salary must be a finite number", line_number=line_number, field="salary"
+        )
     if salary < 0:
         raise RecordValidationError(
             "Salary must be >= 0", line_number=line_number, field="salary"

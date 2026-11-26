@@ -127,6 +127,8 @@ class PayrollService:
 
     def notify(self, records: Iterable[PayrollRecord], accounting: str) -> None:
         records = list(records)
+        if not records:
+            raise DomainError("Payroll has no records, nothing to announce")
         self._notifier.send(
             accounting,
             f"Payroll {records[0].period} ready: {len(records)} records, "

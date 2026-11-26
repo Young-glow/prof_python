@@ -94,7 +94,7 @@ def manager(employee_factory: EmployeeFactory) -> Manager:
 
 @pytest.fixture
 def staff(employee_factory: EmployeeFactory) -> list[Employee]:
-    """Five employees, total monthly pay = 289 640 UAH."""
+    """Five employees: base salaries 266 000 UAH, monthly pay 291 840 UAH."""
     return [
         employee_factory(employee_id=1, name="Anna Koval", salary=52_000),
         employee_factory(employee_id=3, name="Iryna Bondar", salary=68_000,

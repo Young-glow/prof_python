@@ -87,6 +87,10 @@ def _build(raw: dict[str, Any], base: Path) -> AppConfig:
     """Map the nested YAML structure to typed dataclasses."""
     source, target = raw["input"], raw["output"]
     processing, logs = raw["processing"], raw["logging"]
+    departments = processing["allowed_departments"]
+    if not isinstance(departments, list):
+        # a plain string "IT" would otherwise become the set {"I", "T"}
+        raise ConfigurationError("allowed_departments must be a list")
     out_path = base / target["path"]
     return AppConfig(
         version=int(raw.get("version", 0)),
@@ -101,9 +105,7 @@ def _build(raw: dict[str, Any], base: Path) -> AppConfig:
         processing=ProcessingConfig(
             minimum_salary=float(processing["minimum_salary"]),
             skip_invalid=_to_bool(processing["skip_invalid"]),
-            allowed_departments=frozenset(
-                str(d) for d in processing["allowed_departments"]
-            ),
+            allowed_departments=frozenset(str(d) for d in departments),
         ),
         logging=LoggingConfig(
             level=str(logs.get("level", "INFO")).upper(),
